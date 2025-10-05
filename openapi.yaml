@@ -1,71 +1,36 @@
 openapi: 3.1.0
 info:
-  title: VitalHealth PDF Service
+  title: VitalHealth Analyzer Pro – PDF Service
   version: "1.0.0"
+
 servers:
-  - url: https://TU-DOMINIO/generate-pdf
+  - url: https://vitalhealth-analyzer.onrender.com
+
 paths:
   /generate-pdf:
     post:
-      summary: Genera PDF VitalHealth (Base Caliber)
+      summary: Generar informe cuántico en PDF (Base Caliber)
       operationId: generatePdf
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Payload'
+              type: object
+              properties:
+                nombre:
+                  type: string
+                estado_general:
+                  type: object
+                plan_30d:
+                  type: object
+                branding:
+                  type: object
       responses:
         "200":
-          description: PDF generado
+          description: PDF generado correctamente
           content:
             application/pdf:
               schema:
                 type: string
                 format: binary
-components:
-  schemas:
-    Suplemento:
-      type: object
-      properties:
-        nombre: {type: string}
-        dosis: {type: string}
-        duracion_dias: {type: integer}
-        notas: {type: string}
-      required: [nombre, dosis, duracion_dias]
-    Plan30D:
-      type: object
-      properties:
-        habitos: {type: array, items: {type: string}}
-        suplementos: {type: array, items: {$ref: '#/components/schemas/Suplemento'}}
-      required: [habitos, suplementos]
-    Secciones:
-      type: object
-      properties:
-        estado_general: {type: string}
-        lo_bueno: {type: string}
-        vigilar: {type: string}
-        alterado: {type: string}
-        como_se_siente: {type: string}
-        proyeccion: {type: string}
-        seguimiento: {type: string}
-        plan_30d: {$ref: '#/components/schemas/Plan30D'}
-      required: [estado_general, lo_bueno, vigilar, alterado, como_se_siente, proyeccion, seguimiento, plan_30d]
-    Branding:
-      type: object
-      properties:
-        logo_base64: {type: string, description: "PNG en base64 (opcional)"}
-        logo_url: {type: string, description: "URL pública PNG transparente (opcional)"}
-        whatsapp: {type: string}
-        distribuidor: {type: string}
-      required: [whatsapp, distribuidor]
-    Payload:
-      type: object
-      properties:
-        paciente_nombre: {type: string}
-        paciente_edad: {type: string}
-        paciente_sexo: {type: string}
-        fecha_analisis: {type: string}
-        secciones: {$ref: '#/components/schemas/Secciones'}
-        branding: {$ref: '#/components/schemas/Branding'}
-      required: [paciente_nombre, secciones, branding]
